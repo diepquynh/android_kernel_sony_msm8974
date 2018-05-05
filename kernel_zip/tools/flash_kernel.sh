@@ -16,26 +16,10 @@
 # Head to the build tools extracted folder
 cd /tmp;
 
-# Get current boot.img first then unpack it
-dd if=/dev/block/platform/msm_sdcc.1/by-name/boot of=/tmp/boot.img;
-./unpackbootimg -i /tmp/boot.img;
-
-# Initialize boot.img's properties
-base=$(cat *-base);
-cmdline=$(cat *-cmdline);
-pagesize=$(cat *-pagesize);
-ramdisk_offset=$(cat *-ramdisk_offset);
-tags_offset=$(cat *-tags_offset);
-permissive="androidboot.selinux=permissive";
-
-if [ -n "$(grep "$permissive" *-cmdline)" ]; then
-      permissive="";
-else
-      true;
-fi;
+cmdline="androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3b7 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1 vmalloc=300M dwc3.maximum_speed=high dwc3_msm.prop_chg_detect=Y buildvariant=userdebug";
 
 # Pack our new boot.img
-./mkbootimg --kernel /tmp/zImage --ramdisk /tmp/ramdisk.gz --cmdline "$cmdline $permissive" --base $base --pagesize $pagesize --ramdisk_offset $ramdisk_offset --tags_offset $tags_offset --dt /tmp/dt.img -o /tmp/newboot.img;
+./mkbootimg --kernel /tmp/zImage --ramdisk /tmp/ramdisk.gz --cmdline "$cmdline" --base 0x00000000 --pagesize 2048 --ramdisk_offset 0x02000000 --tags_offset 0x01e00000 --dt /tmp/dt.img -o /tmp/newboot.img;
 
 # It's flashing time!!
 dd if=/tmp/newboot.img of=/dev/block/platform/msm_sdcc.1/by-name/boot;

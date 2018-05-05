@@ -35,7 +35,7 @@ else
 fi;
 
 # Pack our new boot.img
-./mkbootimg --kernel /tmp/zImage --ramdisk /tmp/boot.img-ramdisk.gz --cmdline "$cmdline $permissive" --base $base --pagesize $pagesize --ramdisk_offset $ramdisk_offset --tags_offset $tags_offset --dt /tmp/dt.img -o /tmp/newboot.img;
+./mkbootimg --kernel /tmp/zImage --ramdisk /tmp/ramdisk.gz --cmdline "$cmdline $permissive" --base $base --pagesize $pagesize --ramdisk_offset $ramdisk_offset --tags_offset $tags_offset --dt /tmp/dt.img -o /tmp/newboot.img;
 
 # It's flashing time!!
 dd if=/tmp/newboot.img of=/dev/block/platform/msm_sdcc.1/by-name/boot;

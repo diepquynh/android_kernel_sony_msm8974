@@ -1,0 +1,141 @@
+on early-init
+    write /sys/block/mmcblk0/bdi/read_ahead_kb 512
+
+on charger
+    write /sys/module/lpm_levels/enable_low_power/l2 2
+    write /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled 1
+    write /sys/module/msm_thermal/core_control/enabled 0
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu2/online 1
+    write /sys/devices/system/cpu/cpu3/online 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 300000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 300000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 300000
+    write /sys/module/msm_thermal/core_control/enabled 1
+    write /sys/devices/system/cpu/cpu1/online 0
+    write /sys/devices/system/cpu/cpu2/online 0
+    write /sys/devices/system/cpu/cpu3/online 0
+
+on enable-low-power
+    write /sys/module/lpm_levels/enable_low_power/l2 4
+    write /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu0/standalone_power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/standalone_power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/standalone_power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/standalone_power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu0/standalone_power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/standalone_power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/standalone_power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/standalone_power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/retention/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/retention/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/retention/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu0/retention/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/retention/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/retention/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/retention/idle_enabled 1
+    write /sys/module/msm_thermal/core_control/enabled 0
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu2/online 1
+    write /sys/devices/system/cpu/cpu3/online 1
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 300000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 300000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 300000
+
+    chown root system /sys/devices/system/cpu/cpu1/online
+    chown root system /sys/devices/system/cpu/cpu2/online
+    chown root system /sys/devices/system/cpu/cpu3/online
+    chmod 664 /sys/devices/system/cpu/cpu1/online
+    chmod 664 /sys/devices/system/cpu/cpu2/online
+    chmod 664 /sys/devices/system/cpu/cpu3/online
+
+    write /dev/cpuctl/cpu.notify_on_migrate 1
+
+on boot
+    trigger enable-low-power
+    # RZ's minimum freq is 268MHz and maximum freq is 2,5GHz
+    # However, let's use the default of 2,26GHz, because it's
+    # msm8974ab's default frequency
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2265600
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 2265600
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2265600
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 2265600
+
+on property:init.svc.recovery=running
+    trigger enable-low-power
+    write /sys/class/android_usb/android0/idVendor 0FCE
+    write /sys/class/android_usb/android0/idProduct 6${ro.usb.pid_suffix}
+
+on nonencrypted
+    # zzmoove tunables
+    #write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "zzmoove"
+    #write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "zzmoove"
+    #write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor "zzmoove"
+    #write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor "zzmoove"
+    #write /sys/devices/system/cpu/cpufreq/zzmoove/profile_number 4
+    #write /sys/devices/system/cpu/cpufreq/zzmoove/scaling_responsiveness_freq 883200
+
+    # intelliactive tunables
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "intelliactive"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "intelliactive"
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor "intelliactive"
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor "intelliactive"
+    write /sys/devices/system/cpu/cpufreq/intelliactive/above_hispeed_delay "19000 1400000:39000 1700000:19000"
+    write /sys/devices/system/cpu/cpufreq/intelliactive/go_hispeed_load 99
+    write /sys/devices/system/cpu/cpufreq/intelliactive/hispeed_freq 1190400
+    write /sys/devices/system/cpu/cpufreq/intelliactive/io_is_busy 0
+    write /sys/devices/system/cpu/cpufreq/intelliactive/target_loads "85 1497600:90 1728000:95"
+    write /sys/devices/system/cpu/cpufreq/intelliactive/min_sample_time 40000
+    write /sys/devices/system/cpu/cpufreq/intelliactive/sampling_down_factor 100000
+    write /sys/devices/system/cpu/cpufreq/intelliactive/timer_rate 30000
+
+    # intelli_plug tunables
+    write /sys/module/intelli_plug/parameters/intelli_plug_active 1
+    write /sys/module/intelli_plug/parameters/cpu_nr_run_threshold 1000
+    write /sys/module/intelli_plug/parameters/touch_boost_active 0
+
+    # intellithermal tunables    
+    write /sys/module/msm_thermal_v2/core_control/enabled 1
+    write /sys/module/msm_thermal_v2/parameters/enabled 1
+    write /sys/module/msm_thermal_v2/parameters/core_limit_temp_degC 85
+    write /sys/module/msm_thermal_v2/parameters/limit_temp_degC 70
+
+on property:dev.bootcomplete=1
+    # Set RZ's minimum freq on boot completion to prevent conflicts with
+    # default ramdisk values
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 268800
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 268800
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 268800
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 268800
+
+    # Set max mA current for usb/dc charger
+    write /sys/class/power_supply/qpnp-dc/current_max 1800000
+    write /sys/class/power_supply/usb/current_max 1500000
+
+    rm /data/system/perfd/default_values
+
+    # In case the above doesn't work
+    write /sys/block/mmcblk0/queue/scheduler row
+    # Set separated iosched for SD card
+    write /sys/block/mmcblk1/queue/scheduler zen
+
+    write /sys/block/mmcblk0/queue/rq_affinity 0
+    write /sys/block/mmcblk1/queue/rq_affinity 0

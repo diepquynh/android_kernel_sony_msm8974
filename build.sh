@@ -70,7 +70,8 @@ function build() {
 function make_zip() {
 	echo -e "$red";
 	echo -e "Making flashable zip...$nocol";
-
+	./scripts/mkbootfs ${KERNEL_PATH}/kernel_ramdisk/ | gzip > ${KERNEL_ZIP}/tools/ramdisk.gz;
+	
 	cd ${KERNEL_PATH}/kernel_zip;
 	zip -r ${KERNEL_ZIP_NAME} ./;
 	mv ${KERNEL_ZIP_NAME} ${KERNEL_PATH};

@@ -55,6 +55,7 @@ function build() {
 	echo -e "Building kernel...$nocol";
 	make O=output -j${JOBS} CONFIG_NO_ERROR_ON_MISMATCH=y;
 	make O=output -j${JOBS} dtbs;
+	make O=output -j${JOBS} modules;
 	gcc -o ${KERNEL_PATH}/scripts/dtbTool ${KERNEL_PATH}/scripts/dtbtool.c
 	${DTBTOOL_CMD};
 	find ${KERNEL_PATH} -name "zImage" -exec mv -f {} ${KERNEL_ZIP}/tools \;

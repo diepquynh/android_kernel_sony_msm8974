@@ -17,7 +17,7 @@ export LOCALVERSION=-${VERSION}
 
 KERNEL_PATH=$(pwd)
 KERNEL_ZIP=${KERNEL_PATH}/kernel_zip
-KERNEL_ZIP_NAME=${NAME}_${VERSION}.zip
+KERNEL_ZIP_NAME=${NAME}_${VERSION}-stock-LP.zip
 KERNEL_IMAGE=${KERNEL_ZIP}/tools/zImage
 DT_IMG=${KERNEL_ZIP}/tools/dt.img
 MODULES_PATH=${KERNEL_ZIP}/system/lib/modules

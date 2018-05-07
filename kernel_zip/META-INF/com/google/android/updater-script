@@ -13,7 +13,7 @@ ui_print("Installing kernel modules...");
 mount("ext4", "EMMC", "/dev/block/platform/msm_sdcc.1/by-name/system", "/system");
 package_extract_dir("system", "/system");
 ui_print("Initializing init.d support...");
-set_perm(0, 0, 0755, "/system/bin/install-recovery.sh");
+set_perm(0, 0, 0755, "/system/bin/sysinit");
 set_perm(0, 0, 0755, "/system/bin/busybox");
 set_perm_recursive(0, 0, 0755, 0755, "/system/etc/init.d");
 ui_print("Setting permissions...");

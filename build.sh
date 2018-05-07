@@ -60,6 +60,8 @@ function build() {
 	${DTBTOOL_CMD};
 	find ${KERNEL_PATH} -name "zImage" -exec mv -f {} ${KERNEL_ZIP}/tools \;
 	find ${KERNEL_PATH} -name "*.ko" -exec mv -f {} ${MODULES_PATH} \;
+	# wlan.ko needs stripping
+	${CROSS_COMPILE}strip -g ${MODULES_PATH}/wlan.ko;
 
 	BUILD_END=$(date +"%s");
 	DIFF=$(($BUILD_END - $BUILD_START));

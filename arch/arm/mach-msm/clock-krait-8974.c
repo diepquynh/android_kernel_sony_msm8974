@@ -478,6 +478,9 @@ static void get_krait_bin_format_b(struct platform_device *pdev,
 #ifdef CONFIG_OC_ULTIMATE
 	dev_info(&pdev->dev, "DooMLoRD: Forcing CPU OC Ultimate!\n");
 	*speed = 3;
+#ifdef CONFIG_MACH_SONY_RHINE
+	*pvs = 4;
+#endif
 #else
 	dev_info(&pdev->dev, "DooMLoRD: Forcing CPU OC!\n");
 	*speed = 1;

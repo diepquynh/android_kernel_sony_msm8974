@@ -1,6 +1,3 @@
-on early-init
-    write /sys/block/mmcblk0/bdi/read_ahead_kb 512
-
 on charger
     write /sys/module/lpm_levels/enable_low_power/l2 2
     write /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled 1

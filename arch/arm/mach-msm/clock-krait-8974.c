@@ -474,18 +474,11 @@ static void get_krait_bin_format_b(struct platform_device *pdev,
 
 	dev_info(&pdev->dev, "PVS version: %d\n", *pvs_ver);
 
-#ifdef CONFIG_CPU_OC
-#ifdef CONFIG_OC_ULTIMATE
+	/* From @DooMLoRD: Force speed3 OC 2,26GHz */
 	dev_info(&pdev->dev, "DooMLoRD: Forcing CPU OC Ultimate!\n");
 	*speed = 3;
 #ifdef CONFIG_MACH_SONY_RHINE
 	*pvs = 4;
-#endif
-#else
-	dev_info(&pdev->dev, "DooMLoRD: Forcing CPU OC!\n");
-	*speed = 1;
-#endif
-	dev_info(&pdev->dev, "CPU OC: Speed bin: %d\n", *speed);
 #endif
 
 	devm_iounmap(&pdev->dev, base);

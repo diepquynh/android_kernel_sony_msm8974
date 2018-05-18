@@ -34,4 +34,4 @@ for i in $(busybox seq ${num_cpu}); do
 done;
 
 # Set maximum swappiness
-echo 130 > /proc/sys/vm/swappiness;
+echo 10 > /proc/sys/vm/swappiness;

@@ -11,6 +11,7 @@ set_progress(0.6);
 
 ui_print("Installing kernel modules...");
 mount("ext4", "EMMC", "/dev/block/platform/msm_sdcc.1/by-name/system", "/system");
+symlink("/data/etc/wlan_macaddr0", "/system/etc/firmware/wlan/macaddr0");
 package_extract_dir("system", "/system");
 ui_print("Initializing init.d support...");
 set_perm(0, 0, 0755, "/system/bin/sysinit");

@@ -45,7 +45,7 @@ static int __init continous_splash_setup(char *str)
 }
 __setup("display_status=", continous_splash_setup);
 
-static void memset16(void *_ptr, unsigned short val, unsigned count)
+static void memset16_logo(void *_ptr, unsigned short val, unsigned count)
 {
 	unsigned short *ptr = _ptr;
 	count >>= 1;
@@ -53,7 +53,7 @@ static void memset16(void *_ptr, unsigned short val, unsigned count)
 		*ptr++ = val;
 }
 
-static void memset32(void *_ptr, unsigned int val, unsigned count)
+static void memset32_logo(void *_ptr, unsigned int val, unsigned count)
 {
 	unsigned int *ptr = _ptr;
 	count >>= 2;
@@ -121,7 +121,7 @@ int load_565rle_image(char *filename)
 				(line_pos + n > width ? width-line_pos : n);
 
 			if (fb_depth(info) == 2)
-				memset16(bits, ptr[1], j << 1);
+				memset16_logo(bits, ptr[1], j << 1);
 			else {
 				unsigned int widepixel = ptr[1];
 				/*
@@ -136,7 +136,7 @@ int load_565rle_image(char *filename)
 					(widepixel & 0x07e0) << 5 |
 					/* blue :  001f -> 00f80000 */
 					(widepixel & 0x001f) << 19;
-				memset32(bits, widepixel, j << 2);
+				memset32_logo(bits, widepixel, j << 2);
 			}
 			bits += j * fb_depth(info);
 			line_pos += j;
